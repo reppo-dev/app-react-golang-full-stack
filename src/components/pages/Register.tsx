@@ -3,6 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff, Mail, User } from "lucide-react";
+import { useState } from "react";
 
 const registerSchema = z
   .object({
@@ -26,6 +28,9 @@ const registerSchema = z
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 const Register = () => {
+  const [password, setPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState(false);
+
   const navigate = useNavigate();
 
   const {
@@ -63,81 +68,99 @@ const Register = () => {
       >
         <h1 className="text-2xl font-bold text-center mb-2">Please register</h1>
         <div className="flex flex-col">
-          <input
-            {...register("firstName")}
-            type="text"
-            placeholder="First Name"
-            className="border p-2 rounded focus:outline-blue-500"
-          />
+          <div className="border p-2 rounded flex items-center">
+            <User size={20} className="text-gray-400 mr-2" />
+            <input
+              {...register("firstName")}
+              type="text"
+              placeholder="First Name"
+              className="w-full outline-none bg-transparent"
+            />
+          </div>
           {errors.firstName && (
             <span className="text-red-500 text-xs mt-1">
               {errors.firstName.message}
             </span>
           )}
         </div>
-        {/* Last Name */}
         <div className="flex flex-col">
-          <input
-            {...register("lastName")}
-            type="text"
-            placeholder="Last Name"
-            className="border p-2 rounded focus:outline-blue-500"
-          />
+          <div className="border rounded flex items-center p-2">
+            <User size={20} className="text-gray-400 mr-2" />
+            <input
+              {...register("lastName")}
+              type="text"
+              placeholder="Last Name"
+              className="outline-none bg-transparent w-full"
+            />
+          </div>
           {errors.lastName && (
             <span className="text-red-500 text-xs mt-1">
               {errors.lastName.message}
             </span>
           )}
         </div>
-        {/* Email */}
         <div className="flex flex-col">
-          <input
-            {...register("email")}
-            type="email"
-            placeholder="Email"
-            className="border p-2 rounded focus:outline-blue-500"
-          />
+          <div className="border p-2 rounded focus:outline-blue-500 flex items-center">
+            <Mail size={20} className="text-gray-400 mr-2" />
+            <input
+              {...register("email")}
+              type="email"
+              placeholder="Email"
+              className="outline-none bg-transparent w-full"
+            />
+          </div>
           {errors.email && (
             <span className="text-red-500 text-xs mt-1">
               {errors.email.message}
             </span>
           )}
         </div>
-        {/* Password */}
+
         <div className="flex flex-col">
-          <input
-            {...register("password")}
-            type="password"
-            placeholder="Password"
-            className="border p-2 rounded focus:outline-blue-500"
-          />
+          <div className="border p-2 rounded flex items-center">
+            <input
+              {...register("password")}
+              type={password ? "text" : "password"}
+              placeholder="Password"
+              className="outline-none bg-transparent w-full"
+            />
+            <button type="button" onClick={() => setPassword(!password)}>
+              {password ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
           {errors.password && (
             <span className="text-red-500 text-xs mt-1">
               {errors.password.message}
             </span>
           )}
         </div>
-        {/* Password Confirm */}
         <div className="flex flex-col">
-          <input
-            {...register("passwordConfirm")}
-            type="password"
-            placeholder="Password Confirm"
-            className="border p-2 rounded focus:outline-blue-500"
-          />
+          <div className="border p-2 rounded flex items-center">
+            <input
+              {...register("passwordConfirm")}
+              type={confirmPassword ? "text" : "password"}
+              placeholder="Password Confirm"
+              className="outline-none bg-transparent w-full"
+            />
+            <button
+              type="button"
+              onClick={() => setConfirmPassword(!confirmPassword)}
+            >
+              {confirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
           {errors.passwordConfirm && (
             <span className="text-red-500 text-xs mt-1">
               {errors.passwordConfirm.message}
             </span>
           )}
         </div>
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={isSubmitting}
           className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-blue-400 transition-colors"
         >
-          {isSubmitting ? "Submitting..." : "Submit"}
+          {isSubmitting ? "Login..." : "Submit"}
         </button>
       </form>
     </main>
