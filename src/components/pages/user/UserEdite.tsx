@@ -3,93 +3,175 @@ import axios from "axios";
 import { Eye, EyeOff, Mail, User, UserCog } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 
-const registerSchema = z
+const editSchema = z
   .object({
     firstName: z.string().min(2, "First name must be at least 2 characters"),
     lastName: z.string().min(2, "Last name must be at least 2 characters"),
     email: z.string().email("Please enter a valid email address"),
+    role_id: z
+      .number("Please select a role")
+      .int()
+      .positive("You must select a valid role"),
     password: z
-      .string()
-      .min(6, "Password must be at least 6 characters")
-      .regex(
-        /^(?=.*[a-zA-Z])(?=.*\d).+$/,
-        "Password must contain at least one letter and one number",
-      ),
-    passwordConfirm: z.string().min(1, "Please confirm your password"),
-    role_id: z.int().min(1, "you must set role for user"),
+      .literal("")
+      .or(
+        z
+          .string()
+          .min(6, "Password must be at least 6 characters")
+          .regex(
+            /^(?=.*[a-zA-Z])(?=.*\d).+$/,
+            "Password must contain at least one letter and one number",
+          ),
+      )
+      .optional(),
+    passwordConfirm: z.string().optional(),
   })
-  .refine((data) => data.password === data.passwordConfirm, {
-    message: "Passwords do not match",
-    path: ["passwordConfirm"],
-  });
+  .refine(
+    (data) => {
+      if (data.password && data.password !== "") {
+        return data.password === data.passwordConfirm;
+      }
+      return true;
+    },
+    {
+      message: "Passwords do not match",
+      path: ["passwordConfirm"],
+    },
+  );
 
-type RegisterFormData = z.infer<typeof registerSchema>;
+type EditFormData = z.infer<typeof editSchema>;
 
-const UserCreate = (props: number) => {
-  //   const [firstName, setFirstName] = useState("");
-  //   const [lastName, setLastName] = useState("");
-  //   const [email, setEmail] = useState("");
-  //   const [roleId, setRoleId] = useState("");
+interface UpdateUserPayload {
+  first_name: string;
+  last_name: string;
+  email: string;
+  role_id: number;
+  password?: string;
+}
+
+interface RoleType {
+  ID: number;
+  name: string;
+}
+
+const UserEdit = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
+  } = useForm<EditFormData>({
+    resolver: zodResolver(editSchema),
     mode: "onTouched",
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      role_id: undefined,
+      password: "",
+      passwordConfirm: "",
+    },
   });
 
-  const [password, setPassword] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState(false);
-
-  const navigate = useNavigate();
-
-  const onSubmit = async (data: RegisterFormData) => {
-    try {
-      const response = await axios.post("/users ", {
-        first_name: data.firstName,
-        last_name: data.lastName,
-        email: data.email,
-        password: data.password,
-        password_confirm: data.passwordConfirm,
-        role_id: data.role_id,
-      });
-
-      console.log("Registration Successful:", response.data);
-
-      navigate("/users", { replace: true });
-    } catch (error) {
-      console.error("Registration failed:", error);
-    }
-  };
-
-  const [roles, setRoles] = useState<{ ID: number; name: string }[]>([]); // State for roles
+  const [roles, setRoles] = useState<RoleType[]>([]);
+  const [loadingUser, setLoadingUser] = useState(true);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmVisible, setConfirmVisible] = useState(false);
 
   useEffect(() => {
-    const fetchRoles = async () => {
+    const fetchInitialData = async () => {
       try {
-        const response = await axios.get("/roles");
-        setRoles(response.data);
+        const [rolesRes, userRes] = await Promise.all([
+          axios.get<RoleType[]>("/roles"),
+          id ? axios.get(`/users/${id}`) : Promise.resolve(null),
+        ]);
+
+        console.log("[ROLES] fetched:", rolesRes.data);
+
+        setRoles(rolesRes.data);
+
+        if (userRes && userRes.data) {
+          const user = userRes.data;
+          console.log("[USER] fetched from server:", user);
+
+          const parsedRoleId =
+            user.role_id && Number(user.role_id) > 0
+              ? Number(user.role_id)
+              : undefined;
+
+          console.log("[RESET] role_id value being set:", parsedRoleId);
+
+          reset({
+            firstName: user.first_name || "",
+            lastName: user.last_name || "",
+            email: user.email || "",
+            role_id: parsedRoleId,
+            password: "",
+            passwordConfirm: "",
+          });
+        }
       } catch (error) {
-        console.error("Error fetching roles:", error);
+        console.error("[ERROR] fetching initial data:", error);
+      } finally {
+        setLoadingUser(false);
       }
     };
 
-    fetchRoles();
-  }, []);
+    fetchInitialData();
+  }, [id, reset]);
+
+  const onSubmit = async (data: EditFormData) => {
+    console.log("[SUBMIT] raw form data:", data);
+
+    const payload: UpdateUserPayload = {
+      first_name: data.firstName,
+      last_name: data.lastName,
+      email: data.email,
+      role_id: data.role_id,
+    };
+
+    if (data.password && data.password !== "") {
+      payload.password = data.password;
+    }
+
+    console.log("[SUBMIT] payload being sent to server:", payload);
+
+    if (!payload.role_id || payload.role_id <= 0) {
+      console.error(
+        "[BLOCKED] role_id is invalid, request NOT sent:",
+        payload.role_id,
+      );
+      return;
+    }
+
+    try {
+      const response = await axios.put(`/users/${id}`, payload);
+      console.log("[SUCCESS] server response:", response.data);
+      navigate("/users", { replace: true });
+    } catch (error) {
+      console.error("[ERROR] update failed:", error);
+    }
+  };
+
+  if (loadingUser) {
+    return <div className="text-center mt-10">Loading user...</div>;
+  }
 
   return (
-    <div>
+    <div className="flex justify-center mt-10">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 w-80"
       >
-        <h1 className="text-2xl font-bold text-center mb-2">Please register</h1>
-        <div className="flex flex-col">
+        <h1 className="text-2xl font-bold text-center mb-2">Edit User</h1>
+
+        <div>
           <div className="border p-2 rounded flex items-center">
             <User size={20} className="text-gray-400 mr-2" />
             <input
@@ -100,55 +182,52 @@ const UserCreate = (props: number) => {
             />
           </div>
           {errors.firstName && (
-            <span className="text-red-500 text-xs mt-1">
+            <span className="text-red-500 text-xs">
               {errors.firstName.message}
             </span>
           )}
         </div>
-        <div className="flex flex-col">
-          <div className="border rounded flex items-center p-2">
+
+        <div>
+          <div className="border p-2 rounded flex items-center">
             <User size={20} className="text-gray-400 mr-2" />
             <input
               {...register("lastName")}
               type="text"
               placeholder="Last Name"
-              className="outline-none bg-transparent w-full"
+              className="w-full outline-none bg-transparent"
             />
           </div>
           {errors.lastName && (
-            <span className="text-red-500 text-xs mt-1">
+            <span className="text-red-500 text-xs">
               {errors.lastName.message}
             </span>
           )}
         </div>
-        <div className="flex flex-col">
-          <div className="border p-2 rounded focus:outline-blue-500 flex items-center">
+
+        <div>
+          <div className="border p-2 rounded flex items-center">
             <Mail size={20} className="text-gray-400 mr-2" />
             <input
               {...register("email")}
               type="email"
               placeholder="Email"
-              className="outline-none bg-transparent w-full"
+              className="w-full outline-none bg-transparent"
             />
           </div>
           {errors.email && (
-            <span className="text-red-500 text-xs mt-1">
-              {errors.email.message}
-            </span>
+            <span className="text-red-500 text-xs">{errors.email.message}</span>
           )}
         </div>
-        <div className="flex flex-col">
-          <div className="border p-2 rounded focus:outline-blue-500 flex items-center">
+
+        <div>
+          <div className="border p-2 rounded flex items-center">
             <UserCog size={20} className="text-gray-400 mr-2" />
             <select
               {...register("role_id", { valueAsNumber: true })}
-              className="outline-none bg-transparent w-full"
-              defaultValue=""
+              className="w-full outline-none bg-transparent"
             >
-              <option key="default" value="">
-                Select Role
-              </option>
-
+              <option value="">Select Role</option>
               {roles.map((role) => (
                 <option key={role.ID} value={role.ID}>
                   {role.name}
@@ -157,61 +236,66 @@ const UserCreate = (props: number) => {
             </select>
           </div>
           {errors.role_id && (
-            <span className="text-red-500 text-xs mt-1">
+            <span className="text-red-500 text-xs">
               {errors.role_id.message}
             </span>
           )}
         </div>
 
-        <div className="flex flex-col">
+        <div>
           <div className="border p-2 rounded flex items-center">
             <input
               {...register("password")}
-              type={password ? "text" : "password"}
-              placeholder="Password"
-              className="outline-none bg-transparent w-full"
+              type={passwordVisible ? "text" : "password"}
+              placeholder="New Password (optional)"
+              className="w-full outline-none bg-transparent"
             />
-            <button type="button" onClick={() => setPassword(!password)}>
-              {password ? <EyeOff size={20} /> : <Eye size={20} />}
+            <button
+              type="button"
+              onClick={() => setPasswordVisible(!passwordVisible)}
+            >
+              {passwordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
           {errors.password && (
-            <span className="text-red-500 text-xs mt-1">
+            <span className="text-red-500 text-xs">
               {errors.password.message}
             </span>
           )}
         </div>
-        <div className="flex flex-col">
+
+        <div>
           <div className="border p-2 rounded flex items-center">
             <input
               {...register("passwordConfirm")}
-              type={confirmPassword ? "text" : "password"}
-              placeholder="Password Confirm"
-              className="outline-none bg-transparent w-full"
+              type={confirmVisible ? "text" : "password"}
+              placeholder="Confirm Password"
+              className="w-full outline-none bg-transparent"
             />
             <button
               type="button"
-              onClick={() => setConfirmPassword(!confirmPassword)}
+              onClick={() => setConfirmVisible(!confirmVisible)}
             >
-              {confirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              {confirmVisible ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
           {errors.passwordConfirm && (
-            <span className="text-red-500 text-xs mt-1">
+            <span className="text-red-500 text-xs">
               {errors.passwordConfirm.message}
             </span>
           )}
         </div>
+
         <button
           type="submit"
           disabled={isSubmitting}
           className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-blue-400 transition-colors"
         >
-          {isSubmitting ? "Login..." : "Submit"}
+          {isSubmitting ? "Updating..." : "Update User"}
         </button>
       </form>
     </div>
   );
 };
 
-export default UserCreate;
+export default UserEdit;

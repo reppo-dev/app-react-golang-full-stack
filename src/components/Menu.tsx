@@ -15,6 +15,11 @@ const Menu = () => {
               Users
             </Link>
           </li>
+          <li>
+            <Link to="/roles" className="block text-blue-600 font-medium">
+              Roles
+            </Link>
+          </li>
         </ul>
       </nav>
     </aside>
