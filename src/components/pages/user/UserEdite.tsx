@@ -1,0 +1,217 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { Eye, EyeOff, Mail, User, UserCog } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { z } from "zod";
+
+const registerSchema = z
+  .object({
+    firstName: z.string().min(2, "First name must be at least 2 characters"),
+    lastName: z.string().min(2, "Last name must be at least 2 characters"),
+    email: z.string().email("Please enter a valid email address"),
+    password: z
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .regex(
+        /^(?=.*[a-zA-Z])(?=.*\d).+$/,
+        "Password must contain at least one letter and one number",
+      ),
+    passwordConfirm: z.string().min(1, "Please confirm your password"),
+    role_id: z.int().min(1, "you must set role for user"),
+  })
+  .refine((data) => data.password === data.passwordConfirm, {
+    message: "Passwords do not match",
+    path: ["passwordConfirm"],
+  });
+
+type RegisterFormData = z.infer<typeof registerSchema>;
+
+const UserCreate = (props: number) => {
+  //   const [firstName, setFirstName] = useState("");
+  //   const [lastName, setLastName] = useState("");
+  //   const [email, setEmail] = useState("");
+  //   const [roleId, setRoleId] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    mode: "onTouched",
+  });
+
+  const [password, setPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState(false);
+
+  const navigate = useNavigate();
+
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      const response = await axios.post("/users ", {
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        password: data.password,
+        password_confirm: data.passwordConfirm,
+        role_id: data.role_id,
+      });
+
+      console.log("Registration Successful:", response.data);
+
+      navigate("/users", { replace: true });
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
+  };
+
+  const [roles, setRoles] = useState<{ ID: number; name: string }[]>([]); // State for roles
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await axios.get("/roles");
+        setRoles(response.data);
+      } catch (error) {
+        console.error("Error fetching roles:", error);
+      }
+    };
+
+    fetchRoles();
+  }, []);
+
+  return (
+    <div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-4 w-80"
+      >
+        <h1 className="text-2xl font-bold text-center mb-2">Please register</h1>
+        <div className="flex flex-col">
+          <div className="border p-2 rounded flex items-center">
+            <User size={20} className="text-gray-400 mr-2" />
+            <input
+              {...register("firstName")}
+              type="text"
+              placeholder="First Name"
+              className="w-full outline-none bg-transparent"
+            />
+          </div>
+          {errors.firstName && (
+            <span className="text-red-500 text-xs mt-1">
+              {errors.firstName.message}
+            </span>
+          )}
+        </div>
+        <div className="flex flex-col">
+          <div className="border rounded flex items-center p-2">
+            <User size={20} className="text-gray-400 mr-2" />
+            <input
+              {...register("lastName")}
+              type="text"
+              placeholder="Last Name"
+              className="outline-none bg-transparent w-full"
+            />
+          </div>
+          {errors.lastName && (
+            <span className="text-red-500 text-xs mt-1">
+              {errors.lastName.message}
+            </span>
+          )}
+        </div>
+        <div className="flex flex-col">
+          <div className="border p-2 rounded focus:outline-blue-500 flex items-center">
+            <Mail size={20} className="text-gray-400 mr-2" />
+            <input
+              {...register("email")}
+              type="email"
+              placeholder="Email"
+              className="outline-none bg-transparent w-full"
+            />
+          </div>
+          {errors.email && (
+            <span className="text-red-500 text-xs mt-1">
+              {errors.email.message}
+            </span>
+          )}
+        </div>
+        <div className="flex flex-col">
+          <div className="border p-2 rounded focus:outline-blue-500 flex items-center">
+            <UserCog size={20} className="text-gray-400 mr-2" />
+            <select
+              {...register("role_id", { valueAsNumber: true })}
+              className="outline-none bg-transparent w-full"
+              defaultValue=""
+            >
+              <option key="default" value="">
+                Select Role
+              </option>
+
+              {roles.map((role) => (
+                <option key={role.ID} value={role.ID}>
+                  {role.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          {errors.role_id && (
+            <span className="text-red-500 text-xs mt-1">
+              {errors.role_id.message}
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-col">
+          <div className="border p-2 rounded flex items-center">
+            <input
+              {...register("password")}
+              type={password ? "text" : "password"}
+              placeholder="Password"
+              className="outline-none bg-transparent w-full"
+            />
+            <button type="button" onClick={() => setPassword(!password)}>
+              {password ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
+          {errors.password && (
+            <span className="text-red-500 text-xs mt-1">
+              {errors.password.message}
+            </span>
+          )}
+        </div>
+        <div className="flex flex-col">
+          <div className="border p-2 rounded flex items-center">
+            <input
+              {...register("passwordConfirm")}
+              type={confirmPassword ? "text" : "password"}
+              placeholder="Password Confirm"
+              className="outline-none bg-transparent w-full"
+            />
+            <button
+              type="button"
+              onClick={() => setConfirmPassword(!confirmPassword)}
+            >
+              {confirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
+          {errors.passwordConfirm && (
+            <span className="text-red-500 text-xs mt-1">
+              {errors.passwordConfirm.message}
+            </span>
+          )}
+        </div>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-blue-400 transition-colors"
+        >
+          {isSubmitting ? "Login..." : "Submit"}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default UserCreate;

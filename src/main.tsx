@@ -4,10 +4,11 @@ import "./index.css";
 import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./components/pages/Dashboard.tsx";
-import Users from "./components/pages/Users.tsx";
+import Users from "./components/pages/user/Users.tsx";
 import Register from "./components/pages/Register.tsx";
 import Login from "./components/pages/Login.tsx";
-import UserCreate from "./components/pages/UserCreate.tsx";
+import UserCreate from "./components/pages/user/UserCreate.tsx";
+import UserEdite from "./components/pages/user/UserEdite.tsx";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
       { index: true, path: "/dashboard", element: <Dashboard /> },
       { path: "/users", element: <Users /> },
       { path: "/users/create", element: <UserCreate /> },
+      { path: "/users/:id/edit", element: <UserEdite /> },
     ],
   },
   { path: "/register", element: <Register /> },

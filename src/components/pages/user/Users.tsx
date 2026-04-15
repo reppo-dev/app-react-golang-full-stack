@@ -84,9 +84,15 @@ const Users = () => {
                 <td>{user.email}</td>
                 <td>{user.role.name}</td>
                 <td>
-                  <div>
+                  <div className="flex gap-2 items-center">
+                    <Link
+                      to={`/users/${user.ID}/edit`}
+                      className="cursor-pointer items-center hover:scale-105 p-2 h-7 hover:bg-gray-300 rounded w-10 transition-all duration-200 text-xs bg-gray-200"
+                    >
+                      Edit
+                    </Link>
                     <button
-                      className="cursor-pointer hover:scale-105 h-7 hover:bg-gray-300 rounded w-10 transition-all duration-200 text-xs bg-gray-200"
+                      className="cursor-pointer hover:scale-105 h-8 hover:bg-gray-300 rounded w-10 transition-all duration-200 text-xs bg-gray-200"
                       onClick={() => del(user.ID)}
                     >
                       Delete

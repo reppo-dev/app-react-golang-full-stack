@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { Eye, EyeOff, KeyIcon, Mail, User, UserCog } from "lucide-react";
-import { useState } from "react";
+import { Eye, EyeOff, Mail, User, UserCog } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -67,6 +67,21 @@ const UserCreate = () => {
     }
   };
 
+  const [roles, setRoles] = useState<{ ID: number; name: string }[]>([]); // State for roles
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await axios.get("/roles");
+        setRoles(response.data);
+      } catch (error) {
+        console.error("Error fetching roles:", error);
+      }
+    };
+
+    fetchRoles();
+  }, []);
+
   return (
     <div>
       <form
@@ -125,12 +140,21 @@ const UserCreate = () => {
         <div className="flex flex-col">
           <div className="border p-2 rounded focus:outline-blue-500 flex items-center">
             <UserCog size={20} className="text-gray-400 mr-2" />
-            <input
+            <select
               {...register("role_id", { valueAsNumber: true })}
-              type="text"
-              placeholder="Role ID"
               className="outline-none bg-transparent w-full"
-            />
+              defaultValue=""
+            >
+              <option key="default" value="">
+                Select Role
+              </option>
+
+              {roles.map((role) => (
+                <option key={role.ID} value={role.ID}>
+                  {role.name}
+                </option>
+              ))}
+            </select>
           </div>
           {errors.role_id && (
             <span className="text-red-500 text-xs mt-1">
