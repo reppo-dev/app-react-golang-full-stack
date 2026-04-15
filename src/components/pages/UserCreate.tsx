@@ -1,10 +1,10 @@
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Mail, User } from "lucide-react";
+import { Eye, EyeOff, KeyIcon, Mail, User, UserCog } from "lucide-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { z } from "zod";
 
 const registerSchema = z
   .object({
@@ -19,6 +19,7 @@ const registerSchema = z
         "Password must contain at least one letter and one number",
       ),
     passwordConfirm: z.string().min(1, "Please confirm your password"),
+    role_id: z.int().min(1, "you must set role for user"),
   })
   .refine((data) => data.password === data.passwordConfirm, {
     message: "Passwords do not match",
@@ -27,11 +28,11 @@ const registerSchema = z
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
-const Register = () => {
-  const [password, setPassword] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState(false);
-
-  const navigate = useNavigate();
+const UserCreate = () => {
+  //   const [firstName, setFirstName] = useState("");
+  //   const [lastName, setLastName] = useState("");
+  //   const [email, setEmail] = useState("");
+  //   const [roleId, setRoleId] = useState("");
 
   const {
     register,
@@ -42,26 +43,32 @@ const Register = () => {
     mode: "onTouched",
   });
 
+  const [password, setPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState(false);
+
+  const navigate = useNavigate();
+
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const response = await axios.post("/register ", {
+      const response = await axios.post("/users ", {
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
         password: data.password,
         password_confirm: data.passwordConfirm,
+        role_id: data.role_id,
       });
 
       console.log("Registration Successful:", response.data);
 
-      navigate("/dashboard", { replace: true });
+      navigate("/users", { replace: true });
     } catch (error) {
       console.error("Registration failed:", error);
     }
   };
 
   return (
-    <main className="flex items-center justify-center h-screen">
+    <div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 w-80"
@@ -115,6 +122,22 @@ const Register = () => {
             </span>
           )}
         </div>
+        <div className="flex flex-col">
+          <div className="border p-2 rounded focus:outline-blue-500 flex items-center">
+            <UserCog size={20} className="text-gray-400 mr-2" />
+            <input
+              {...register("role_id", { valueAsNumber: true })}
+              type="text"
+              placeholder="Role ID"
+              className="outline-none bg-transparent w-full"
+            />
+          </div>
+          {errors.role_id && (
+            <span className="text-red-500 text-xs mt-1">
+              {errors.role_id.message}
+            </span>
+          )}
+        </div>
 
         <div className="flex flex-col">
           <div className="border p-2 rounded flex items-center">
@@ -163,8 +186,8 @@ const Register = () => {
           {isSubmitting ? "Login..." : "Submit"}
         </button>
       </form>
-    </main>
+    </div>
   );
 };
 
-export default Register;
+export default UserCreate;

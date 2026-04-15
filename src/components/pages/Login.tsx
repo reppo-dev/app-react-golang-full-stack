@@ -4,6 +4,7 @@ import { z } from "zod";
 import axios from "axios";
 import { useState } from "react";
 import { Eye, EyeOff, Mail } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const registerSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -21,6 +22,8 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 const Login = () => {
   const [password, setPassword] = useState(false);
 
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -32,12 +35,14 @@ const Login = () => {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const response = await axios.post("http://localhost:8000/api/login ", {
+      const response = await axios.post("/login ", {
         email: data.email,
         password: data.password,
       });
 
       console.log("Registration Successful:", response.data);
+
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       console.error("Registration failed:", error);
     }
@@ -50,7 +55,6 @@ const Login = () => {
         className="flex flex-col gap-4 w-80"
       >
         <h1 className="text-2xl font-bold text-center mb-2">Welcome Back</h1>
-        <div className="flex flex-col"></div>
 
         <div className="flex flex-col">
           <div className="border p-2 rounded focus:outline-blue-500 flex items-center">
