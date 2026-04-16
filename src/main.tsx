@@ -11,6 +11,7 @@ import UserCreate from "./components/pages/user/UserCreate.tsx";
 import UserEdite from "./components/pages/user/UserEdite.tsx";
 import Roles from "./components/pages/roles/Roles.tsx";
 import RoleCreate from "./components/pages/roles/RoleCreate.tsx";
+import RoleEdit from "./components/pages/roles/RoleEdite.tsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
       { path: "/users/:id/edit", element: <UserEdite /> },
       { path: "/roles", element: <Roles /> },
       { path: "/roles/create", element: <RoleCreate /> },
+      { path: "/roles/:id/edit", element: <RoleEdit /> },
     ],
   },
   { path: "/register", element: <Register /> },
