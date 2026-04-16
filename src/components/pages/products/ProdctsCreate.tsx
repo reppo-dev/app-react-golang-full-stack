@@ -117,7 +117,7 @@ const ProductCreate = () => {
           disabled={isSubmitting}
           className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-blue-400 transition-colors"
         >
-          {isSubmitting ? "Login..." : "Submit"}
+          {isSubmitting ? "Creating..." : "Create Product"}
         </button>
       </form>
     </div>

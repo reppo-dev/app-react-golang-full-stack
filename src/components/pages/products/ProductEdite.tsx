@@ -141,7 +141,7 @@ const ProductEdit = () => {
           disabled={isSubmitting}
           className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-blue-400 transition-colors"
         >
-          {isSubmitting ? "Updating..." : "Update User"}
+          {isSubmitting ? "Updating..." : "Update Product"}
         </button>
       </form>
     </div>
