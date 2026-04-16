@@ -88,7 +88,7 @@ const UserCreate = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 w-80"
       >
-        <h1 className="text-2xl font-bold text-center mb-2">Please register</h1>
+        <h1 className="text-2xl font-bold text-center mb-2">Create User</h1>
         <div className="flex flex-col">
           <div className="border p-2 rounded flex items-center">
             <User size={20} className="text-gray-400 mr-2" />

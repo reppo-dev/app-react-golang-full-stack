@@ -47,8 +47,6 @@ const Roles = () => {
           <thead className="bg-gray-100 border-b">
             <tr>
               <th className="p-3 text-sm font-semibold">#</th>
-              <th className="p-3 text-sm font-semibold">Name</th>
-              <th className="p-3 text-sm font-semibold">Email</th>
               <th className="p-3 text-sm font-semibold">Role</th>
               <th className="p-3 text-sm font-semibold">Active</th>
             </tr>
