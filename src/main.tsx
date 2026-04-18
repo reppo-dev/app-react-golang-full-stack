@@ -16,6 +16,7 @@ import ProductCreate from "./components/pages/products/ProdctsCreate.tsx";
 import ProductEdit from "./components/pages/products/ProductEdite.tsx";
 import Products from "./components/pages/products/Products.tsx";
 import Orders from "./components/pages/orders/Orders.tsx";
+import Profile from "./components/pages/Profile.tsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, path: "/dashboard", element: <Dashboard /> },
+      { path: "/profile", element: <Profile /> },
       { path: "/users", element: <Users /> },
       { path: "/users/create", element: <UserCreate /> },
       { path: "/users/:id/edit", element: <UserEdite /> },

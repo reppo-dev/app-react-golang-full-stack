@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Menu = () => {
   return (
-    <aside className="w-60 bg-white border-r min-h-screen">
+    <aside className="w-25 lg:w-60 bg-white border-r min-h-screen">
       <nav className="p-4">
         <ul>
           <li>

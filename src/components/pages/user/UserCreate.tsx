@@ -29,11 +29,6 @@ const registerSchema = z
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 const UserCreate = () => {
-  //   const [firstName, setFirstName] = useState("");
-  //   const [lastName, setLastName] = useState("");
-  //   const [email, setEmail] = useState("");
-  //   const [roleId, setRoleId] = useState("");
-
   const {
     register,
     handleSubmit,

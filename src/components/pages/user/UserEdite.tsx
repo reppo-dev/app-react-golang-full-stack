@@ -92,20 +92,15 @@ const UserEdit = () => {
           id ? axios.get(`/users/${id}`) : Promise.resolve(null),
         ]);
 
-        console.log("[ROLES] fetched:", rolesRes.data);
-
         setRoles(rolesRes.data);
 
         if (userRes && userRes.data) {
           const user = userRes.data;
-          console.log("[USER] fetched from server:", user);
 
           const parsedRoleId =
             user.role_id && Number(user.role_id) > 0
               ? Number(user.role_id)
               : undefined;
-
-          console.log("[RESET] role_id value being set:", parsedRoleId);
 
           reset({
             firstName: user.first_name || "",
