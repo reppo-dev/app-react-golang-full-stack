@@ -12,9 +12,11 @@ import UserEdite from "./components/pages/user/UserEdite.tsx";
 import Roles from "./components/pages/roles/Roles.tsx";
 import RoleCreate from "./components/pages/roles/RoleCreate.tsx";
 import RoleEdit from "./components/pages/roles/RoleEdite.tsx";
-import Products from "./components/pages/products/products.tsx";
 import ProductCreate from "./components/pages/products/ProdctsCreate.tsx";
 import ProductEdit from "./components/pages/products/ProductEdite.tsx";
+import Products from "./components/pages/products/Products.tsx";
+import Orders from "./components/pages/orders/Orders.tsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -30,6 +32,7 @@ const router = createBrowserRouter([
       { path: "/products", element: <Products /> },
       { path: "/products/create", element: <ProductCreate /> },
       { path: "/products/:id/edit", element: <ProductEdit /> },
+      { path: "/orders", element: <Orders /> },
     ],
   },
   { path: "/register", element: <Register /> },

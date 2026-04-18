@@ -4,12 +4,13 @@ import { DollarSign, FileTextIcon, Image, Type } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+import ImageUploader from "../../ImageUploader";
 
 const registerSchema = z.object({
   title: z.string().min(2, "Title must be at least 2 characters"),
   description: z.string().min(2, "Description must be at least 2 characters"),
   image: z.string().min(1, "Please pase correct image"),
-  price: z.number().min(1, "Password must be at least 6 characters"),
+  price: z.number().min(1, "Price must be greater than 0"),
 });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -18,6 +19,7 @@ const ProductCreate = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -69,9 +71,8 @@ const ProductCreate = () => {
         <div>
           <div className="border p-2 rounded flex items-center">
             <FileTextIcon size={20} className="text-gray-400 mr-2" />
-            <input
+            <textarea
               {...register("description")}
-              type="text"
               placeholder="Description"
               className="w-full outline-none bg-transparent"
             />
@@ -98,13 +99,18 @@ const ProductCreate = () => {
           )}
         </div>
         <div>
-          <div className="border p-2 rounded flex items-center">
+          <div className="border p-2 rounded flex items-center justify-center">
             <Image size={20} className="text-gray-400 mr-2" />
             <input
               {...register("image")}
               type="text"
               placeholder="URL image"
               className="w-full outline-none bg-transparent"
+            />
+            <ImageUploader
+              uploaded={(url) =>
+                setValue("image", url, { shouldValidate: true })
+              }
             />
           </div>
           {errors.image && (
