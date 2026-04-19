@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  backend:
+    build: .
+    environment:
+      DB_HOST: http://localhost
+      DB_PORT: 5432
+      DB_DATABASE: admin
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      SECRET_KEY: secret
