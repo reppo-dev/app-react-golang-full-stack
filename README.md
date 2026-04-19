@@ -38,8 +38,6 @@ A modern full-stack web application with **React (TypeScript)** frontend and **G
 | :--- | :--- |
 | `frontend/src/components/pages/` | Login, Register, Dashboard, Products, Users, Orders, Profile |
 | `frontend/src/components/` | Reusable UI components |
-| `frontend/src/services/` | Axios API calls |
-| `frontend/src/types/` | TypeScript interfaces |
 | `backend/controllers/` | Request handlers (Fiber) |
 | `backend/models/` | GORM models |
 | `backend/middleware/` | JWT and RBAC middleware |
