@@ -35,19 +35,26 @@ A modern full-stack web application with **React (TypeScript)** frontend and **G
 ## 📁 Project Structure
 
 
-├── frontend/ # React app
+├── frontend/
 │ ├── src/
-│ │ ├── pages/ # Login, Register, Dashboard, Products, Users, Orders, Profile
-│ │ └── components/ # Reusable UI
-│ │ └── pages/ # Login, Register, Dashboard, Products, Users, Orders, Profile
-│ │
+│ │ ├── pages/
+│ │ │ ├── Login.tsx
+│ │ │ ├── Register.tsx
+│ │ │ ├── Dashboard.tsx
+│ │ │ ├── Products.tsx
+│ │ │ ├── Users.tsx
+│ │ │ ├── Orders.tsx
+│ │ │ └── Profile.tsx
+│ │ ├── components/
+│ │ ├── services/
+│ │ └── types/
 │ └── package.json
 │
-├── backend/ # Golang Fiber API
-│ ├── controllers/ # Request handlers
-│ ├── models/ # GORM models
-│ ├── middleware/ # JWT & RBAC
-│ ├── routes/ # Route definitions
+├── backend/
+│ ├── controllers/
+│ ├── models/
+│ ├── middleware/
+│ ├── routes/
 │ └── main.go
 │
 └── README.md
