@@ -36,7 +36,7 @@ A modern full-stack web application with **React (TypeScript)** frontend and **G
 
 | Path | Description |
 | :--- | :--- |
-| `frontend/src/pages/` | Login, Register, Dashboard, Products, Users, Orders, Profile |
+| `frontend/src/components/pages/` | Login, Register, Dashboard, Products, Users, Orders, Profile |
 | `frontend/src/components/` | Reusable UI components |
 | `frontend/src/services/` | Axios API calls |
 | `frontend/src/types/` | TypeScript interfaces |
