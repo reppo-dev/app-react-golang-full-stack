@@ -34,7 +34,7 @@ A modern full-stack web application with **React (TypeScript)** frontend and **G
 
 ## 📁 Project Structure
 
-.
+
 ├── frontend/ # React app
 │ ├── src/
 │ │ ├── pages/ # Login, Register, Dashboard, Products, Users, Orders, Profile
