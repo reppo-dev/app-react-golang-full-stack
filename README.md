@@ -6,7 +6,7 @@ A modern full-stack web application with **React (TypeScript)** frontend and **G
 
 ### Frontend
 
-- React 18 + TypeScript
+- React 19 + TypeScript
 - React Router Dom v6
 - React Hook Form + Zod
 - Tailwind CSS
@@ -17,7 +17,7 @@ A modern full-stack web application with **React (TypeScript)** frontend and **G
 - Golang + Fiber
 - GORM (ORM)
 - JWT Authentication
-- MySQL/PostgreSQL
+- PostgreSQL
 
 ## ✨ Features
 
