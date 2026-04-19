@@ -34,30 +34,17 @@ A modern full-stack web application with **React (TypeScript)** frontend and **G
 
 ## 📁 Project Structure
 
-
-├── frontend/
-│ ├── src/
-│ │ ├── pages/
-│ │ │ ├── Login.tsx
-│ │ │ ├── Register.tsx
-│ │ │ ├── Dashboard.tsx
-│ │ │ ├── Products.tsx
-│ │ │ ├── Users.tsx
-│ │ │ ├── Orders.tsx
-│ │ │ └── Profile.tsx
-│ │ ├── components/
-│ │ ├── services/
-│ │ └── types/
-│ └── package.json
-│
-├── backend/
-│ ├── controllers/
-│ ├── models/
-│ ├── middleware/
-│ ├── routes/
-│ └── main.go
-│
-└── README.md
+| Path | Description |
+| :--- | :--- |
+| `frontend/src/pages/` | Login, Register, Dashboard, Products, Users, Orders, Profile |
+| `frontend/src/components/` | Reusable UI components |
+| `frontend/src/services/` | Axios API calls |
+| `frontend/src/types/` | TypeScript interfaces |
+| `backend/controllers/` | Request handlers (Fiber) |
+| `backend/models/` | GORM models |
+| `backend/middleware/` | JWT and RBAC middleware |
+| `backend/routes/` | API route definitions |
+| `backend/main.go` | Application entry point |
 
 ## 🚀 Getting Started
 
