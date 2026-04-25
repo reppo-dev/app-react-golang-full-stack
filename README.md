@@ -91,15 +91,15 @@ A modern full-stack web application with **React (TypeScript)** frontend and **G
 
 ## 📁 Project Structure
 
-| Path | Description |
-| :--- | :--- |
+| Path                             | Description                                                  |
+| :------------------------------- | :----------------------------------------------------------- |
 | `frontend/src/components/pages/` | Login, Register, Dashboard, Products, Users, Orders, Profile |
-| `frontend/src/components/` | Reusable UI components |
-| `backend/controllers/` | Request handlers (Fiber) |
-| `backend/models/` | GORM models |
-| `backend/middleware/` | JWT and RBAC middleware |
-| `backend/routes/` | API route definitions |
-| `backend/main.go` | Application entry point |
+| `frontend/src/components/`       | Reusable UI components                                       |
+| `backend/controllers/`           | Request handlers (Fiber)                                     |
+| `backend/models/`                | GORM models                                                  |
+| `backend/middleware/`            | JWT and RBAC middleware                                      |
+| `backend/routes/`                | API route definitions                                        |
+| `backend/main.go`                | Application entry point                                      |
 
 ## 🚀 Getting Started
 

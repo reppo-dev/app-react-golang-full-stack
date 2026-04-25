@@ -18,6 +18,8 @@ func Connect() {
 	username := os.Getenv("DB_USERNAME")
 	password := os.Getenv("DB_PASSWORD")
 
+		// dsn := "host=localhots user=postgres password=****** dbname=myapp port=5432 sslmode=disable" for localhots
+
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		host, username, password, dbName, port)
 
