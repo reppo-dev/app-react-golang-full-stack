@@ -63,7 +63,7 @@ A modern full-stack web application with **React (TypeScript)** frontend and **G
 
 ### Frontend
 
-- React 18 + TypeScript
+- React 19 + TypeScript
 - React Router Dom v6
 - React Hook Form + Zod
 - Tailwind CSS
@@ -74,7 +74,7 @@ A modern full-stack web application with **React (TypeScript)** frontend and **G
 - Golang + Fiber
 - GORM (ORM)
 - JWT Authentication
-- MySQL/PostgreSQL
+- PostgreSQL
 
 ## ✨ Features
 
@@ -91,23 +91,15 @@ A modern full-stack web application with **React (TypeScript)** frontend and **G
 
 ## 📁 Project Structure
 
-.
-├── frontend/ # React app
-│ ├── src/
-│ │ ├── pages/ # Login, Register, Dashboard, Products, Users, Orders, Profile
-│ │ └── components/ # Reusable UI
-│ │ └── pages/ # Login, Register, Dashboard, Products, Users, Orders, Profile
-│ │
-│ └── package.json
-│
-├── backend/ # Golang Fiber API
-│ ├── controllers/ # Request handlers
-│ ├── models/ # GORM models
-│ ├── middleware/ # JWT & RBAC
-│ ├── routes/ # Route definitions
-│ └── main.go
-│
-└── README.md
+| Path | Description |
+| :--- | :--- |
+| `frontend/src/components/pages/` | Login, Register, Dashboard, Products, Users, Orders, Profile |
+| `frontend/src/components/` | Reusable UI components |
+| `backend/controllers/` | Request handlers (Fiber) |
+| `backend/models/` | GORM models |
+| `backend/middleware/` | JWT and RBAC middleware |
+| `backend/routes/` | API route definitions |
+| `backend/main.go` | Application entry point |
 
 ## 🚀 Getting Started
 
