@@ -2,6 +2,63 @@
 
 A modern full-stack web application with **React (TypeScript)** frontend and **Golang (Fiber)** backend. Features JWT authentication, role-based access control (RBAC), CRUD operations, and CSV export.
 
+## 📸 Screenshots
+
+### 🔐 Authentication
+
+<table>
+  <tr>
+    <td><img src="./screenshots/login.png" alt="Login" width="100%"/></td>
+    <td><img src="./screenshots/register.png" alt="Register" width="100%"/></td>
+  </tr>
+</table>
+
+### 📊 Dashboard
+
+<table>
+  <tr>
+    <td><img src="./screenshots/dashboard.png" alt="Dashboard 1" width="100%"/></td>
+  </tr>
+</table>
+
+### 👥 Users
+
+<table>
+  <tr>
+    <td><img src="./screenshots/user.png" alt="Users 1" width="100%"/></td>
+    <td><img src="./screenshots/edituser.png" alt="Users 2" width="100%"/></td>
+    <td><img src="./screenshots/adduser.png" alt="Users 3" width="100%"/></td>
+  </tr>
+</table>
+
+### 🧑‍💼 Roles
+
+<table>
+  <tr>
+    <td><img src="./screenshots/role.png" alt="Roles 1" width="100%"/></td>
+    <td><img src="./screenshots/createrole.png" alt="Roles 2" width="100%"/></td>
+    <td><img src="./screenshots/editrole.png" alt="Roles 3" width="100%"/></td>
+  </tr>
+</table>
+
+### 📦 Products
+
+<table>
+  <tr>
+    <td><img src="./screenshots/product.png" alt="Products 1" width="100%"/></td>
+    <td><img src="./screenshots/createproducts.png" alt="Products 2" width="100%"/></td>
+    <td><img src="./screenshots/editproducts.png" alt="Products 3" width="100%"/></td>
+  </tr>
+</table>
+
+### 🛒 Orders
+
+<img src="./screenshots/orders.png" alt="Orders" width="80%"/>
+
+### 🧑 Profile
+
+<img src="./screenshots/profile.png" alt="Profile" width="60%"/>
+
 ## 🛠 Tech Stack
 
 ### Frontend
